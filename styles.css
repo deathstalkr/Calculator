@@ -3,17 +3,17 @@ body {
 	flex-direction: column;
 	align-items: center;
 	font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-		DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New,
-		monospace;
+	  DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New,
+	  monospace;
 	background-color: rgb(244, 244, 103);
-}
-
-.header {
+  }
+  
+  .header {
 	font-weight: 800;
 	font-size: xx-large;
-}
-
-.main {
+  }
+  
+  .main {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -22,37 +22,61 @@ body {
 	min-height: 500px;
 	padding: 10px;
 	margin-top: 50px;
-}
-
-.calculator {
+  }
+  
+  .calculator {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	width: 400px;
 	padding: 20px;
 	border: 1px black solid;
-    background-color: rgb(69, 66, 66);
-}
-
-#display {
-	width: 100%;
+	background-color: rgb(69, 66, 66);
+  }
+  
+  #display {
+	display: flex;
+	flex-direction: column;
+	width: 95%;
 	height: 100px;
 	border: 0px;
 	box-shadow: inset 2px 3px 5px 0px rgba(0, 0, 0, 0.7);
 	outline: none;
 	text-align: right;
 	padding: 10px;
-    background-color: aliceblue;
-}
-
-#all-buttons {
+	background-color: aliceblue;
+	margin-bottom: 10px;
+  }
+  
+  #all-buttons {
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-evenly;
+	justify-content: space-between;
+	margin: 0 -10px;
+  }
+  
+  .keys {
+	margin: 10px;
+	padding: 20px;
+	width: 80px;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+  }
+  
+  button[disabled],
+  button {
+	color: black;
+	cursor: pointer;
+	border: none;
+	background-color: white;
+  }
 
-}
-
-.keys {
-	margin: 10px 10px;
-	padding: 20px 20px;
-}
+  button:active {
+	background: rgb(69, 66, 66);
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+       -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+            box-shadow: inset 0px 0px 5px #c1c1c1;
+     outline: none;
+  }
+  
