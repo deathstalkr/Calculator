@@ -2,18 +2,23 @@ let expression = "";
 
 const DISPLAY = document.getElementById("user-input");
 const RESULT = document.getElementById("result");
-const buttons = document.querySelectorAll(".keys.display");
 
 function appendToDisplay(value) {
 	// Check for existing decimal in the current number
 	if (value === "." && /\.\d*$/.test(expression)) {
 		return;
 	} else if (isOperator(value)) {
-		// Remove previous operators
+		// Replace previous operators
 		expression = expression.replace(/[-+*/%]$/, "");
 	}
 
-	expression += value;
+	// special case: Prevent appending a zero in front when any number is pressed
+	if (expression === "0") {
+		expression = value;
+	} else {
+		expression += value;
+	}
+
 	updateDisplay(expression);
 }
 
@@ -32,35 +37,41 @@ function updateResult() {
 }
 
 function clearAllDisplay() {
-	expression = "";
+	expression = "0";
 	console.log("expression:", expression);
 	updateResult();
-	updateDisplay("0");
-	enableButtons();
+	updateDisplay(expression);
 }
 
 function deleteDisplay() {
 	expression = expression.slice(0, -1);
+
+	if (expression == "") {
+		expression = "0";
+	}
+
 	updateDisplay(expression);
-	enableButtons();
 }
 
 function updateDisplay(value) {
+	//append 0 to expression if the first value is an operator i.e., +2 to be displayed as 0 + 2
+	if (RESULT.value == "0" && isOperator(value.charAt(0))) {
+		value = appendZero(value);
+	}
+
+	DISPLAY.value = transformOperators(value);
+}
+
+function appendZero(value) {
+	return "0" + value;
+}
+
+function transformOperators(value) {
 	if (value.includes("*") || value.includes("/")) {
 		value = value.replace(/\*/g, "x").replace(/\//g, "÷");
 	}
-	DISPLAY.value = value || "";
+	return value;
 }
-
-// function calculateResult(){
-// 	const result = math.evaluate(expression) || '0';
-// 	console.log("result:", result)
-// 	expression = result.toString();
-// 	console.log("expression:", expression)
-// 	updateResult();
-// 	disableButtons();
-// 	expression = "";
-// }
 
 function calculateResult() {
 	try {
@@ -75,37 +86,27 @@ function calculateResult() {
 				decimalIndex !== -1 &&
 				resultString.length - decimalIndex > 6
 			) {
-				expression =
-					Math.round(result * 100000) / 100000;
+				expression = (
+					Math.round(result * 100000) / 100000
+				).toString();
 			} else if (resultString === "Infinity") {
-				alert("Cannot divide by Zero");
-				expression = "";
-				updateDisplay(expression);
+				alert(
+					"Warning: You're now under FBI's hitlist for dividing by Zero. Terminate now!"
+				);
+				clearAllDisplay();
 			} else {
 				expression = resultString;
 			}
 		}
 		console.log("expression:", expression);
 		updateResult();
-		disableButtons();
-		expression = "";
 	} catch (error) {
-		expression = "";
-		updateDisplay(expression);
 		alert("Invalid expression");
-	} finally {
-		enableButtons();
+		clearAllDisplay();
 	}
+	//  finally {
+	// 	enableButtons();
+	// }
 }
 
-function disableButtons() {
-	buttons.forEach((button) => {
-		button.disabled = true;
-	});
-}
-
-function enableButtons() {
-	buttons.forEach((button) => {
-		button.disabled = false;
-	});
-}
+document.onload = clearAllDisplay();
