@@ -1,4 +1,4 @@
-let expression = "";
+let expression = "0";
 
 const DISPLAY = document.getElementById("user-input");
 const RESULT = document.getElementById("result");
@@ -9,11 +9,11 @@ function appendToDisplay(value) {
 		return;
 	} else if (isOperator(value)) {
 		// Replace previous operators
-		expression = expression.replace(/[-+*/%]$/, "");
+		expression = expression.replace(/[-+*/]$/, "");
 	}
 
 	// special case: Prevent appending a zero in front when any number is pressed
-	if (expression === "0") {
+	if (expression === "0" && !isOperator(value)) {
 		expression = value;
 	} else {
 		expression += value;
@@ -23,13 +23,7 @@ function appendToDisplay(value) {
 }
 
 function isOperator(value) {
-	return (
-		value === "+" ||
-		value === "-" ||
-		value === "*" ||
-		value === "/" ||
-		value === "%"
-	);
+	return value === "+" || value === "-" || value === "*" || value === "/";
 }
 
 function updateResult() {
@@ -67,7 +61,7 @@ function appendZero(value) {
 
 function transformOperators(value) {
 	if (value.includes("*") || value.includes("/")) {
-		value = value.replace(/\*/g, "x").replace(/\//g, "÷");
+		value = value.replace(/\*/g, "×").replace(/\//g, "÷");
 	}
 	return value;
 }
@@ -75,6 +69,7 @@ function transformOperators(value) {
 function calculateResult() {
 	try {
 		const result = math.evaluate(expression);
+
 		if (Number.isInteger(result)) {
 			expression = result.toString(); // display whole numbers without trailing zeros
 		} else {
@@ -89,23 +84,17 @@ function calculateResult() {
 					Math.round(result * 100000) / 100000
 				).toString();
 			} else if (resultString === "Infinity") {
-				alert(
-					"Warning: You're now under FBI's hitlist for dividing by Zero. Terminate now!"
-				);
+				alert("You cannot divide by Zero!");
 				clearAllDisplay();
 			} else {
 				expression = resultString;
 			}
 		}
-		console.log("expression:", expression);
 		updateResult();
 	} catch (error) {
 		alert("Invalid expression");
 		clearAllDisplay();
 	}
-	//  finally {
-	// 	enableButtons();
-	// }
 }
 
 document.onload = clearAllDisplay();
