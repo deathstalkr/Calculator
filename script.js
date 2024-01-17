@@ -38,7 +38,6 @@ function updateResult() {
 
 function clearAllDisplay() {
 	expression = "0";
-	console.log("expression:", expression);
 	updateResult();
 	updateDisplay(expression);
 }
